@@ -6,6 +6,10 @@
 				<%= gravatar_for @user %>
 				<%= @user.name %>
 			</h1>
+			<p>
+				<%= @user.email %> 
+				<%= @user.password_digest %>
+			</p>
 		</section>
 	</aside>
 </div>
