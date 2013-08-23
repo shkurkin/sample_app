@@ -112,4 +112,16 @@ describe "Authentication" do
 			end
 		end
 	end
+
+	describe "accessible attributes" do
+		let(:non_admin) { FactoryGirl.create(:user) }
+
+		before { sign_in non_admin }
+
+		it "should not allow access to admin" do
+			expect do
+				non_admin.admin(1)
+			end.to raise_error(ActiveModel::MassAssignmentSecurity::Error)
+		end
+	end
 end
