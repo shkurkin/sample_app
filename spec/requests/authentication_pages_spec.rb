@@ -120,7 +120,7 @@ describe "Authentication" do
 
 		it "should not allow access to admin" do
 			expect do
-				non_admin.admin(1)
+				non_admin.admin = 1
 			end.to raise_error(ActiveModel::MassAssignmentSecurity::Error)
 		end
 	end
