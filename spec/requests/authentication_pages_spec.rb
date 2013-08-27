@@ -8,6 +8,8 @@ describe "Authentication" do
 
 		it { should have_selector('h1', text: 'Sign in') }
 		it { should have_selector('title', text: 'Sign in') }
+		it { should_not have_link('Profile') }
+		it { should_not have_link('Settings') }
 	end
 
 	describe "signin" do
@@ -37,6 +39,16 @@ describe "Authentication" do
 			it { should have_link('Sign out', href: signout_path) }
 
 			it { should_not have_link('Sign in', href: signin_path) }
+
+			describe "New action should redirect to root URL" do
+				before { get new_user_path }
+				specify { response.should redirect_to(root_url) }
+			end
+
+			describe "Create action should redirect to root URL" do
+				before { post users_path }
+				specify { response.should redirect_to(root_url) }
+			end
 		end
 	end  
 
@@ -56,6 +68,15 @@ describe "Authentication" do
 
 					it "should render the desired protected page" do
 						page.should have_selector('title', text: 'Edit user')
+					end
+
+					describe "friendly forwarding only works the first time" do
+						before do
+						 click_link "Sign out" 
+						 sign_in(user)
+						end
+
+						it { should have_selector('title', text: user.name) }
 					end
 				end
 			end
@@ -114,13 +135,12 @@ describe "Authentication" do
 	end
 
 	describe "accessible attributes" do
-		let(:non_admin) { FactoryGirl.create(:user) }
-
-		before { sign_in non_admin }
+		let(:user) {FactoryGirl.create(:user) }
 
 		it "should not allow access to admin" do
 			expect do
-				non_admin.admin = 1
+				User.new(email: user.email, name: user.name, password: user.password,
+						 password_confirmation: user.password_confirmation, admin: true )
 			end.to raise_error(ActiveModel::MassAssignmentSecurity::Error)
 		end
 	end
