@@ -42,6 +42,20 @@ describe "Static pages" do
 					end
 				end
 			end
+
+			describe "microposts pagination" do
+				before do
+					50.times do
+						content = Faker::Lorem.sentence(5)
+						fill_in 'micropost_content', with: content
+				 		click_button "Post"
+					end
+				end
+				after { user.microposts.delete_all }
+
+				it { should have_selector 'div.pagination' }
+
+			end
 		end
 	end
 
