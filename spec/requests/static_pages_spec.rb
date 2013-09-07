@@ -56,6 +56,17 @@ describe "Static pages" do
 				it { should have_selector 'div.pagination' }
 
 			end
+
+			describe "delete links" do
+				let(:user2) { FactoryGirl.create(:user) }
+				before do
+					FactoryGirl.create(:micropost, user: user2, content: "User2 lorem")
+					visit user_path(user2)
+				end
+
+				it { should_not have_link("delete") }
+				
+			end
 		end
 	end
 
