@@ -8,8 +8,6 @@ describe Relationship do
 	subject { relationship }
 
 	it { should be_valid }
-	it { should respond_to(:feed) }
-	it { should respond_to(:relationships) }
 
 	describe "accessible attributes" do
 		it "should not allow access to follower_id" do
@@ -24,5 +22,15 @@ describe Relationship do
 		it { should respond_to(:followed) }
 		its(:follower) { should == follower }
 		its(:followed) { should == followed }
+	end
+
+	describe "when followed id is not present" do
+		before { relationship.followed_id = nil }
+		it { should_not be_valid }
+	end
+	
+	describe "when follower id is not present" do
+		before { relationship.follower_id = nil }
+		it { should_not be_valid }
 	end
 end
