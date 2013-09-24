@@ -191,6 +191,7 @@ describe User do
       its(:feed) do
         followed_user.microposts.each do |micropost|
           should include(micropost)
+        end
       end
     end
   end
